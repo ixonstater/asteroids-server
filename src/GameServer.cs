@@ -41,6 +41,9 @@ namespace AsteroidsServer.Src
             while (index < spinCycleCountMeasurements.Length)
             {
                 lastTimestamp = stopwatch.Elapsed.TotalMicroseconds;
+                // Basically we want to monopolize a thread as much as possible since Thread.Sleep() uses low-resolution timing.
+                // If we just let a while(true){} loop CPU usage shoots up, but if we use Thread.SpinWait() instead usage is more
+                // manageable.
                 Thread.SpinWait(spinFor);
                 double elapsedTime = stopwatch.Elapsed.TotalMicroseconds - lastTimestamp;
                 spinCycleCountMeasurements[index++] = elapsedTime;
