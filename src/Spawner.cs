@@ -1,4 +1,4 @@
 namespace AsteroidsServer.Src
 {
-    public class GameState { }
+    public class Spawner { }
 }
