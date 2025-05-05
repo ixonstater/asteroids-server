@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "Test",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/bin/Debug/net9.0/AsteroidsServer.dll",
+            "args": [
+                "test"
+            ],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+        {
+            "name": "Launch",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}/AsteroidsServer.csproj",
+        }
+    ]
+}
