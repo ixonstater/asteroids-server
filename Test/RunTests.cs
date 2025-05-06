@@ -9,3 +9,5 @@ public class RunTests
         MessageUtilsTest.Test();
     }
 }
+
+public class TestingException(string msg) : Exception(msg) { }

@@ -9,13 +9,16 @@ public class MessageUtils
     public readonly static byte terminator = Encoding.ASCII.GetBytes(";")[0];
     public readonly static byte escape = Encoding.ASCII.GetBytes("\\")[0];
 
-    /**
-    * Don't pass non-ascii characters here, you have been warned :)
-    */
+    /// <summary>
+    /// Don't pass non-ascii characters here, you have been warned :)
+    /// </summary>
+    /// <param name="str">The string to serialize...</param>
+    /// <returns></returns>
     public static byte[] Serialize(string str)
     {
         var bytes = EscapeSpecialCharacters(Encoding.ASCII.GetBytes(str));
         bytes.AddFirst((byte)MessageSegmentType.STRING);
+        bytes.AddLast(terminator);
 
         return [.. bytes];
     }
@@ -24,6 +27,7 @@ public class MessageUtils
     {
         var bytes = EscapeSpecialCharacters(BitConverter.GetBytes(num));
         bytes.AddFirst((byte)MessageSegmentType.FLOAT);
+        bytes.AddLast(terminator);
 
         return [.. bytes];
     }
@@ -58,7 +62,11 @@ public class MessageUtils
 
         foreach (var letter in msg)
         {
-            processingType ??= GetMessageTypeFromByte(letter);
+            if (processingType == null)
+            {
+                processingType = GetMessageTypeFromByte(letter);
+                continue;
+            }
 
             if (!escapeActive && letter == escape)
             {
@@ -70,9 +78,11 @@ public class MessageUtils
             {
                 AddSegmentToReadableMessage(message, (MessageSegmentType)processingType, buffer, bufferCount);
                 bufferCount = 0;
+                processingType = null;
+                continue;
             }
 
-            buffer[++bufferCount] = letter;
+            buffer[bufferCount++] = letter;
 
             escapeActive = false;
         }
@@ -84,7 +94,7 @@ public class MessageUtils
     {
         if (type == MessageSegmentType.STRING)
         {
-            msg.StringMessages.AddLast(new MessageSegment<string>(Encoding.ASCII.GetString(bytes, 0, byteCount - 1)));
+            msg.StringMessages.AddLast(new MessageSegment<string>(Encoding.ASCII.GetString(bytes, 0, byteCount)));
         }
         else if (type == MessageSegmentType.FLOAT)
         {
