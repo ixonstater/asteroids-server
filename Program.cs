@@ -10,7 +10,8 @@ class Program
             RunTests.Run();
             return;
         }
-        GameServer server = new(new Spawner(), new GameState());
+
+        GameServer server = new(new(new(), new()));
         server.Start();
     }
 }

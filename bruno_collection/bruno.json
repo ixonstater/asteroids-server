@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Asteroids Server",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

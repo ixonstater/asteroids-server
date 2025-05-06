@@ -1,0 +1,15 @@
+meta {
+  name: Wake Server
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8080
+  body: text
+  auth: inherit
+}
+
+headers {
+  wake: wakey-wakey eggs and bakey
+}
