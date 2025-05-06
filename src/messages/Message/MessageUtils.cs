@@ -6,33 +6,55 @@ namespace AsteroidsServer.Src.Messages.Message;
 // Natural terminator and escape characters must be escaped
 public class MessageUtils
 {
-    public readonly static byte terminator = Encoding.ASCII.GetBytes(";")[0];
-    public readonly static byte escape = Encoding.ASCII.GetBytes("\\")[0];
+    private readonly static byte terminator = Encoding.ASCII.GetBytes(";")[0];
+    private readonly static byte escape = Encoding.ASCII.GetBytes("\\")[0];
+
+    /// <summary>
+    /// Messages are always serialized in a consistent format, string data first, float data second
+    /// </summary>
+    /// <param name="msg"></param>
+    /// <returns></returns>
+    public static byte[] Serialize(Message msg)
+    {
+        IEnumerable<byte> serialMsg = new LinkedList<byte>();
+
+        foreach (var data in msg.StringMessages)
+        {
+            serialMsg = serialMsg.Concat(Serialize(data.Data));
+        }
+
+        foreach (var data in msg.FloatMessages)
+        {
+            serialMsg = serialMsg.Concat(Serialize(data.Data));
+        }
+
+        return [.. serialMsg];
+    }
 
     /// <summary>
     /// Don't pass non-ascii characters here, you have been warned :)
     /// </summary>
     /// <param name="str">The string to serialize...</param>
     /// <returns></returns>
-    public static byte[] Serialize(string str)
+    private static LinkedList<byte> Serialize(string str)
     {
         var bytes = EscapeSpecialCharacters(Encoding.ASCII.GetBytes(str));
         bytes.AddFirst((byte)MessageSegmentType.STRING);
         bytes.AddLast(terminator);
 
-        return [.. bytes];
+        return bytes;
     }
 
-    public static byte[] Serialize(float num)
+    private static LinkedList<byte> Serialize(float num)
     {
         var bytes = EscapeSpecialCharacters(BitConverter.GetBytes(num));
         bytes.AddFirst((byte)MessageSegmentType.FLOAT);
         bytes.AddLast(terminator);
 
-        return [.. bytes];
+        return bytes;
     }
 
-    public static LinkedList<byte> EscapeSpecialCharacters(byte[] bytes)
+    private static LinkedList<byte> EscapeSpecialCharacters(byte[] bytes)
     {
         LinkedList<byte> escapedData = new();
         foreach (byte letter in bytes)
@@ -51,9 +73,9 @@ public class MessageUtils
         return escapedData;
     }
 
-    public static ReadableMessage Deserialize(byte[] msg)
+    public static Message Deserialize(byte[] msg)
     {
-        ReadableMessage message = new();
+        Message message = new();
         MessageSegmentType? processingType = null;
         bool escapeActive = false;
         // I reckon 1kB is gud enuff fer now ¯\_(ツ)_/¯
@@ -76,7 +98,7 @@ public class MessageUtils
 
             if (!escapeActive && letter == terminator)
             {
-                AddSegmentToReadableMessage(message, (MessageSegmentType)processingType, buffer, bufferCount);
+                AddDeserializedSegmentToMessage(message, (MessageSegmentType)processingType, buffer, bufferCount);
                 bufferCount = 0;
                 processingType = null;
                 continue;
@@ -90,7 +112,7 @@ public class MessageUtils
         return message;
     }
 
-    public static void AddSegmentToReadableMessage(ReadableMessage msg, MessageSegmentType type, byte[] bytes, int byteCount)
+    private static void AddDeserializedSegmentToMessage(Message msg, MessageSegmentType type, byte[] bytes, int byteCount)
     {
         if (type == MessageSegmentType.STRING)
         {
@@ -102,7 +124,7 @@ public class MessageUtils
         }
     }
 
-    public static MessageSegmentType GetMessageTypeFromByte(byte type)
+    private static MessageSegmentType GetMessageTypeFromByte(byte type)
     {
         if (type == (int)MessageSegmentType.FLOAT)
         {

@@ -1,5 +1,3 @@
-using AsteroidsServer.Test.Messages.Message;
-
 namespace AsteroidsServer.Test;
 
 public class RunTests

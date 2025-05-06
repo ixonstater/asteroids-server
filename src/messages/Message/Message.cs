@@ -1,6 +1,6 @@
 namespace AsteroidsServer.Src.Messages.Message;
 
-public class ReadableMessage
+public class Message
 {
     private readonly LinkedList<MessageSegment<string>> _stringMessages;
     public LinkedList<MessageSegment<string>> StringMessages
@@ -14,10 +14,16 @@ public class ReadableMessage
         get => _floatMessages;
     }
 
-    public ReadableMessage()
+    public Message()
     {
         _stringMessages = new();
         _floatMessages = new();
+    }
+
+    public Message(LinkedList<MessageSegment<string>>? _stringMessages, LinkedList<MessageSegment<float>>? _floatMessages)
+    {
+        this._stringMessages = _stringMessages ?? new();
+        this._floatMessages = _floatMessages ?? new();
     }
 }
 
@@ -34,13 +40,5 @@ public class MessageSegment<T>(T data)
     public T Data
     {
         get => _data;
-    }
-}
-
-class WriteableMessage
-{
-    protected byte[] Serialize()
-    {
-        throw new NotImplementedException();
     }
 }
