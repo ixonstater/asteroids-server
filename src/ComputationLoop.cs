@@ -12,8 +12,7 @@ public class ComputationLoop
     private int roughSpinCyclesPerMillisecond = 0;
     private double lastTimestamp = 0;
     private double lastTimestampWithActiveSocket = 0;
-    // private readonly double stopLoopAfterMilliseconds = 5 * 60 * 1000;
-    private readonly double stopLoopAfterMilliseconds = 60 * 1000;
+    private readonly double stopLoopAfterMilliseconds = 2 * 60 * 1000;
     private bool running = false;
     public bool Running
     {
