@@ -22,10 +22,9 @@ public class GameServer(ComputationLoop computationLoop)
             HttpListenerContext context = httpListener.GetContext();
             // Using the simple one client per thread model, limit active threads to some reasonable value
             // so we don't overwhelm system resources.
-            if (_sockets.Count <= _maxSockets)
+            if (_sockets.Count < _maxSockets)
             {
-                Thread socketThread = new(() => SocketReadLoop(context));
-                socketThread.Start();
+                SocketReadLoop(context);
             }
             else
             {
@@ -46,11 +45,13 @@ public class GameServer(ComputationLoop computationLoop)
         }
         catch (Exception e)
         {
+            // Connection fails for some reason
             Console.WriteLine(e);
             context.Response.OutputStream.Dispose();
             return;
         }
 
+        // 1KB is good rite...?
         byte[] buffer = new byte[1000];
         Guid socketId = Guid.NewGuid();
         _sockets.Add(socketId, socket);
