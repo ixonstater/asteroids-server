@@ -17,14 +17,12 @@ public class GameServer(ComputationLoop computationLoop)
 
     public void Start()
     {
-        httpListener.Prefixes.Add("http://127.0.0.1:8080/");
+        httpListener.Prefixes.Add("http://127.0.0.1:8081/");
         httpListener.Start();
 
         while (true)
         {
             HttpListenerContext context = httpListener.GetContext();
-            // Using the simple one client per thread model, limit active threads to some reasonable value
-            // so we don't overwhelm system resources.
             if (_sockets.Count < _maxSockets)
             {
                 SocketReadLoop(context);
@@ -49,7 +47,7 @@ public class GameServer(ComputationLoop computationLoop)
         catch (Exception e)
         {
             // Connection fails for some reason
-            Console.WriteLine(e);
+            Console.WriteLine(e.ToString());
             context.Response.OutputStream.Dispose();
             return;
         }

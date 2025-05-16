@@ -2,7 +2,7 @@ using System.Text;
 
 namespace AsteroidsServer.Src.Messages.Message;
 
-// Basic format for messages is (type | message | terminator)...
+// Basic format for messages is (type | segment | terminator)...
 // Natural terminator and escape characters must be escaped
 public class MessageUtils
 {
@@ -14,7 +14,7 @@ public class MessageUtils
     /// </summary>
     /// <param name="msg"></param>
     /// <returns></returns>
-    public static byte[] Serialize(Message msg)
+    public static byte[] Serialize(GenericMessage msg)
     {
         IEnumerable<byte> serialMsg = new LinkedList<byte>();
 
@@ -73,9 +73,9 @@ public class MessageUtils
         return escapedData;
     }
 
-    public static Message Deserialize(byte[] msg)
+    public static GenericMessage Deserialize(byte[] msg)
     {
-        Message message = new();
+        GenericMessage message = new();
         MessageSegmentType? processingType = null;
         bool escapeActive = false;
         // I reckon 1kB is gud enuff fer now ¯\_(ツ)_/¯
@@ -112,7 +112,7 @@ public class MessageUtils
         return message;
     }
 
-    private static void AddDeserializedSegmentToMessage(Message msg, MessageSegmentType type, byte[] bytes, int byteCount)
+    private static void AddDeserializedSegmentToMessage(GenericMessage msg, MessageSegmentType type, byte[] bytes, int byteCount)
     {
         if (type == MessageSegmentType.STRING)
         {

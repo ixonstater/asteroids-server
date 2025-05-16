@@ -1,6 +1,6 @@
 namespace AsteroidsServer.Src.Messages.Message;
 
-public class Message
+public class GenericMessage
 {
     private readonly LinkedList<MessageSegment<string>> _stringMessages;
     public LinkedList<MessageSegment<string>> StringMessages
@@ -14,13 +14,13 @@ public class Message
         get => _floatMessages;
     }
 
-    public Message()
+    public GenericMessage()
     {
         _stringMessages = new();
         _floatMessages = new();
     }
 
-    public Message(LinkedList<MessageSegment<string>>? _stringMessages, LinkedList<MessageSegment<float>>? _floatMessages)
+    public GenericMessage(LinkedList<MessageSegment<string>>? _stringMessages, LinkedList<MessageSegment<float>>? _floatMessages)
     {
         this._stringMessages = _stringMessages ?? new();
         this._floatMessages = _floatMessages ?? new();

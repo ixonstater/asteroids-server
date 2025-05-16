@@ -19,10 +19,10 @@ class MessageUtilsTest
         string third = "a final;\\;\\;;;";
 
         LinkedList<MessageSegment<string>> segments = new([new(first), new(second), new(third)]);
-        Message original = new(segments, null);
+        GenericMessage original = new(segments, null);
         byte[] serialized = MessageUtils.Serialize(original);
 
-        Message msg = MessageUtils.Deserialize(serialized);
+        GenericMessage msg = MessageUtils.Deserialize(serialized);
         MessageSegment<string>[] msgSeg = [.. msg.StringMessages];
 
         if (msgSeg[0].Data != first || msgSeg[1].Data != second || msgSeg[2].Data != third)
@@ -38,10 +38,10 @@ class MessageUtilsTest
         float third = 43;
 
         LinkedList<MessageSegment<float>> segments = new([new(first), new(second), new(third)]);
-        Message original = new(null, segments);
+        GenericMessage original = new(null, segments);
         byte[] serialized = MessageUtils.Serialize(original);
 
-        Message msg = MessageUtils.Deserialize(serialized);
+        GenericMessage msg = MessageUtils.Deserialize(serialized);
         MessageSegment<float>[] msgSeg = [.. msg.FloatMessages];
 
         if (msgSeg[0].Data != first || msgSeg[1].Data != second || msgSeg[2].Data != third)
@@ -63,10 +63,10 @@ class MessageUtilsTest
         string thirdStr = "a final;\\;\\;;;";
         LinkedList<MessageSegment<string>> segmentsStr = new([new(firstStr), new(secondStr), new(thirdStr)]);
 
-        Message original = new(segmentsStr, segments);
+        GenericMessage original = new(segmentsStr, segments);
         byte[] serialized = MessageUtils.Serialize(original);
 
-        Message msg = MessageUtils.Deserialize(serialized);
+        GenericMessage msg = MessageUtils.Deserialize(serialized);
         MessageSegment<string>[] msgSegStr = [.. msg.StringMessages];
         MessageSegment<float>[] msgSeg = [.. msg.FloatMessages];
 
