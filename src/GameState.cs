@@ -13,7 +13,7 @@ namespace AsteroidsServer.Src
 
         public string AddShip(Ship ship)
         {
-            string id = Guid.NewGuid().ToString("n")[5..];
+            string id = Guid.NewGuid().ToString("n")[..5];
             if (!_ships.TryAdd(id, ship))
             {
                 Console.WriteLine("Warning: Failed to add ship with id " + id);

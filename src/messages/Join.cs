@@ -15,17 +15,17 @@ namespace AsteroidsServer.Src.Messages
         public string id = "";
         public IMessage FromRequest(GenericMessage message)
         {
-            int colorIndex = 0;
-            int breakIndex = 0;
+            int colorIndex = 1;
             var current = message.StringMessages.First;
             int segmentCount = 0;
 
-            while (current?.Next != null && segmentCount <= breakIndex)
+            while (current != null)
             {
                 if (segmentCount == colorIndex)
                 {
                     shipColor = Ship.ShipColorFromCode(current.Value.Data);
                 }
+                current = current.Next;
                 segmentCount++;
             }
 

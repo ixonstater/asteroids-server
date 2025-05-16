@@ -4,7 +4,7 @@ using AsteroidsServer.Src.TrackedEntities;
 
 namespace AsteroidsServer.Src
 {
-    class InboundMessageProcessor(GameState gameState)
+    public class InboundMessageProcessor(GameState gameState)
     {
         private readonly GameState gameState = gameState;
 

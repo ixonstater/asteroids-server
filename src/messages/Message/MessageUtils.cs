@@ -73,7 +73,7 @@ public class MessageUtils
         return escapedData;
     }
 
-    public static GenericMessage Deserialize(byte[] msg)
+    public static GenericMessage Deserialize(ArraySegment<byte> msg)
     {
         GenericMessage message = new();
         MessageSegmentType? processingType = null;

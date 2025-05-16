@@ -1,10 +1,11 @@
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
+using AsteroidsServer.Src.Messages.Message;
 
 namespace AsteroidsServer.Src;
 
-public class GameServer(ComputationLoop computationLoop)
+public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor inboundMessageProcessor, GameState gameState)
 {
     private readonly ComputationLoop computationLoop = computationLoop;
     private readonly HttpListener httpListener = new();
@@ -73,7 +74,12 @@ public class GameServer(ComputationLoop computationLoop)
                 }
 
                 WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                PrintByteArrayInAscii(buffer, result.Count);
+                GenericMessage? response = inboundMessageProcessor.ProcessMessage(MessageUtils.Deserialize(new(buffer, 0, result.Count)));
+                if (response != null)
+                {
+                    await socket.SendAsync(MessageUtils.Serialize(response), WebSocketMessageType.Binary, true, CancellationToken.None);
+                }
+
             }
             catch (Exception e)
             {
