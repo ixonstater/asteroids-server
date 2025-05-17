@@ -11,15 +11,24 @@ namespace AsteroidsServer.Src
             get => [.. _ships.Values];
         }
 
+        public ShipEntity? GetShip(string id)
+        {
+            if (!_ships.ContainsKey(id))
+            {
+                return null;
+            }
+
+            return _ships[id];
+        }
+
         public string AddShip(ShipEntity ship)
         {
             string id = Utils.GenerateRandomId();
+            Console.WriteLine("ShipId: " + id);
             if (!_ships.TryAdd(id, ship))
             {
                 Console.WriteLine("Warning: Failed to add ship with id " + id);
             }
-
-            Console.WriteLine("Ship count: " + _ships.Count);
 
             return id;
         }

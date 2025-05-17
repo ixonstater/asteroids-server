@@ -1,5 +1,6 @@
 using AsteroidsServer.Src.Messages;
 using AsteroidsServer.Src.Messages.Message;
+using AsteroidsServer.Src.Messages.Ship;
 using AsteroidsServer.Src.TrackedEntities;
 
 namespace AsteroidsServer.Src
@@ -38,7 +39,19 @@ namespace AsteroidsServer.Src
 
         private GenericMessage? ProcessInboundShipMessage(GenericMessage msg)
         {
-            Messages.Ship.InboundShipMessage ship = (Messages.Ship.InboundShipMessage)new Messages.Ship.InboundShipMessage();
+            InboundShipMessage shipMsg = (InboundShipMessage)new InboundShipMessage().FromRequest(msg);
+            ShipEntity? ship = gameState.GetShip(shipMsg.id);
+
+            if (ship == null)
+            {
+                Console.WriteLine("Warning: Tried to get null ship entity with id: " + shipMsg.id);
+                return null;
+            }
+
+            ship.position.x = shipMsg.position.x;
+            ship.position.y = shipMsg.position.y;
+            ship.rotation.x = shipMsg.position.x;
+            ship.rotation.y = shipMsg.rotation.y;
 
             return null;
         }

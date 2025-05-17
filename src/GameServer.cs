@@ -5,7 +5,7 @@ using AsteroidsServer.Src.Messages.Message;
 
 namespace AsteroidsServer.Src;
 
-public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor inboundMessageProcessor, GameState gameState)
+public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor inboundMessageProcessor)
 {
     private readonly ComputationLoop computationLoop = computationLoop;
     private readonly HttpListener httpListener = new();

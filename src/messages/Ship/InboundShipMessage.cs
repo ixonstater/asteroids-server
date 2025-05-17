@@ -11,10 +11,10 @@ namespace AsteroidsServer.Src.Messages.Ship
 
         public IMessage FromRequest(GenericMessage message)
         {
-            int shipPositionXIndex = 1;
-            int shipPositionYIndex = 2;
-            int shipRotationXIndex = 3;
-            int shipRotationYIndex = 4;
+            int shipPositionXIndex = 0;
+            int shipPositionYIndex = 1;
+            int shipRotationXIndex = 2;
+            int shipRotationYIndex = 3;
 
             var currentFloat = message.FloatMessages.First;
             int floatIndex = 0;
