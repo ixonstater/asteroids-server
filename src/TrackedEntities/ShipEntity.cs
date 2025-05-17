@@ -1,6 +1,6 @@
 namespace AsteroidsServer.Src.TrackedEntities
 {
-    public class Ship
+    public class ShipEntity
     {
         public const string SHIP_RED = "R";
         public const string SHIP_GREEN = "G";

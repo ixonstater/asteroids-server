@@ -4,20 +4,22 @@ namespace AsteroidsServer.Src
 {
     public class GameState
     {
-        private readonly Dictionary<string, Ship> _ships = [];
+        private readonly Dictionary<string, ShipEntity> _ships = [];
 
-        public Ship[] Ships
+        public ShipEntity[] Ships
         {
             get => [.. _ships.Values];
         }
 
-        public string AddShip(Ship ship)
+        public string AddShip(ShipEntity ship)
         {
-            string id = Guid.NewGuid().ToString("n")[..5];
+            string id = Utils.GenerateRandomId();
             if (!_ships.TryAdd(id, ship))
             {
                 Console.WriteLine("Warning: Failed to add ship with id " + id);
             }
+
+            Console.WriteLine("Ship count: " + _ships.Count);
 
             return id;
         }

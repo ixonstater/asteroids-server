@@ -1,5 +1,5 @@
 using AsteroidsServer.Src.Messages.Message;
-using AsteroidsServer.Src.TrackedEntities;
+using AsteroidsServer.Src;
 
 namespace AsteroidsServer.Src.Messages
 {
@@ -11,7 +11,7 @@ namespace AsteroidsServer.Src.Messages
     /// </summary>
     public class Join : IMessage
     {
-        public ShipColor shipColor;
+        public TrackedEntities.ShipColor shipColor;
         public string id = "";
         public IMessage FromRequest(GenericMessage message)
         {
@@ -23,7 +23,7 @@ namespace AsteroidsServer.Src.Messages
             {
                 if (segmentCount == colorIndex)
                 {
-                    shipColor = Ship.ShipColorFromCode(current.Value.Data);
+                    shipColor = TrackedEntities.ShipEntity.ShipColorFromCode(current.Value.Data);
                 }
                 current = current.Next;
                 segmentCount++;

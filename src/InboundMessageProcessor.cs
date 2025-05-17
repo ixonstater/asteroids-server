@@ -20,6 +20,7 @@ namespace AsteroidsServer.Src
             return messageCode switch
             {
                 MessageTypeCodes.join => ProcessJoinMessage(msg),
+                MessageTypeCodes.inboundShip => ProcessInboundShipMessage(msg),
                 _ => null,
             };
         }
@@ -27,12 +28,19 @@ namespace AsteroidsServer.Src
         private GenericMessage? ProcessJoinMessage(GenericMessage msg)
         {
             Join join = (Join)new Join().FromRequest(msg);
-            Ship ship = new()
+            ShipEntity ship = new()
             {
                 color = join.shipColor
             };
             join.id = gameState.AddShip(ship);
             return join.ToResponse();
+        }
+
+        private GenericMessage? ProcessInboundShipMessage(GenericMessage msg)
+        {
+            Messages.Ship.InboundShipMessage ship = (Messages.Ship.InboundShipMessage)new Messages.Ship.InboundShipMessage();
+
+            return null;
         }
     }
 }

@@ -63,7 +63,6 @@ public class ComputationLoop
         {
             lastTimestamp = stopwatch.ElapsedMilliseconds;
             SetActiveSocketTimestamp();
-            Console.WriteLine(stopLoopAfterMilliseconds - (lastTimestamp - lastTimestampWithActiveSocket));
             if (lastTimestamp - lastTimestampWithActiveSocket > stopLoopAfterMilliseconds)
             {
                 running = false;
