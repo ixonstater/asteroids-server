@@ -5,7 +5,7 @@ using AsteroidsServer.Src.Messages.Message;
 
 namespace AsteroidsServer.Src;
 
-public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor inboundMessageProcessor)
+public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor inboundMessageProcessor, GameStateMessageProcessor gameStateMessageProcessor)
 {
     private readonly ComputationLoop computationLoop = computationLoop;
     private readonly HttpListener httpListener = new();
@@ -14,10 +14,16 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
     {
         get => _sockets.Count;
     }
+    public Dictionary<Guid, WebSocket> Sockets
+    {
+        get => _sockets;
+    }
     private readonly int _maxSockets = 10;
 
     public void Start()
     {
+        gameStateMessageProcessor.Sockets = _sockets;
+
         httpListener.Prefixes.Add("http://127.0.0.1:8081/");
         httpListener.Start();
 
@@ -97,12 +103,12 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
     }
 
     /// <summary>
-    /// Just for testing, prints a byte array as ascii chars.
+    /// Just for testing, prints a byte array as a space-delimited hex string
     /// </summary>
     /// <param name="bytes"></param>
     /// <param name="byteCount"></param>
-    public static void PrintByteArrayInAscii(ArraySegment<byte> bytes, int byteCount)
+    public static void PrintByteArray(ArraySegment<byte> bytes, int byteCount)
     {
-        Console.WriteLine(Encoding.ASCII.GetString([.. bytes], 0, byteCount));
+        Console.WriteLine(BitConverter.ToString([.. bytes], 0, byteCount).Replace(" ", string.Empty));
     }
 }

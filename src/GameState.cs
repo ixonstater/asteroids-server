@@ -13,12 +13,12 @@ namespace AsteroidsServer.Src
 
         public ShipEntity? GetShip(string id)
         {
-            if (!_ships.ContainsKey(id))
+            if (!_ships.TryGetValue(id, out ShipEntity? value))
             {
                 return null;
             }
 
-            return _ships[id];
+            return value;
         }
 
         public string AddShip(ShipEntity ship)

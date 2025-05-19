@@ -6,6 +6,7 @@ public class ComputationLoop
 {
     private readonly Spawner spawner;
     private readonly GameState gameState;
+    private readonly GameStateMessageProcessor gameStateMessageProcessor;
     private readonly Stopwatch stopwatch = new();
     // Minimum time between starting a processing tick in milliseconds
     private const int tickRate = 10;
@@ -20,8 +21,9 @@ public class ComputationLoop
     }
     private Func<int>? getActiveSocketCount;
 
-    public ComputationLoop(Spawner spawner, GameState gameState)
+    public ComputationLoop(Spawner spawner, GameState gameState, GameStateMessageProcessor gameStateMessageProcessor)
     {
+        this.gameStateMessageProcessor = gameStateMessageProcessor;
         this.spawner = spawner;
         this.gameState = gameState;
         TuneSpinCyclesPerMillisecond();
@@ -89,5 +91,6 @@ public class ComputationLoop
 
     private void DoWork()
     {
+        // Call GameStateMessageProcessor here
     }
 }
