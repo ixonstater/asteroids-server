@@ -1,38 +1,49 @@
 using System.Net.WebSockets;
+using AsteroidsServer.Src.Messages.Message;
+using AsteroidsServer.Src.Messages.Ship;
 using AsteroidsServer.Src.TrackedEntities;
 
 namespace AsteroidsServer.Src
 {
     public class GameStateMessageProcessor
     {
-        private Dictionary<Guid, WebSocket>? _sockets;
-        public Dictionary<Guid, WebSocket> Sockets
+        private Dictionary<string, WebSocket>? _sockets;
+        public Dictionary<string, WebSocket> Sockets
         {
             set
             {
                 // Only allow sockets to be set once
-                if (_sockets != null)
-                {
-                    _sockets = value;
-                }
+                _sockets ??= value;
             }
         }
 
-        public async void BroadcastShipPositions(Dictionary<string, ShipEntity> ships)
+        public async void BroadcastShipPositions(GameState gameState)
         {
             if (_sockets == null)
             {
                 return;
             }
 
-            byte[] msg = WriteShipPositionMessage();
+            byte[] msg = WriteShipPositionMessage(gameState.Ships);
 
-            foreach (WebSocket socket in _sockets.Values)
+            foreach (var socket in _sockets)
             {
-                await socket.SendAsync(msg, WebSocketMessageType.Binary, true, CancellationToken.None);
+                try
+                {
+                    await socket.Value.SendAsync(msg, WebSocketMessageType.Binary, true, CancellationToken.None);
+                }
+                catch (Exception)
+                {
+                    _sockets.Remove(socket.Key);
+                    gameState.DeleteShip(socket.Key);
+                    continue;
+                }
             }
         }
 
-        private byte[] WriteShipPositionMessage() { }
+        private static byte[] WriteShipPositionMessage(Dictionary<string, ShipEntity> ships)
+        {
+            return MessageUtils.Serialize(Ships.ToResponse(ships));
+        }
     }
 }

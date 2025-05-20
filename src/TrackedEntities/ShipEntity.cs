@@ -26,6 +26,20 @@ namespace AsteroidsServer.Src.TrackedEntities
                 _ => ShipColor.RED
             };
         }
+
+        public static string ColorCodeFromShipColor(ShipColor color)
+        {
+            return color switch
+            {
+                ShipColor.RED => SHIP_RED,
+                ShipColor.GREEN => SHIP_GREEN,
+                ShipColor.FUCHSIA => SHIP_FUCHSIA,
+                ShipColor.PINK => SHIP_PINK,
+                ShipColor.YELLOW => SHIP_YELLOW,
+                ShipColor.BLUE => SHIP_BLUE,
+                _ => SHIP_RED
+            };
+        }
     }
 
     public enum ShipColor

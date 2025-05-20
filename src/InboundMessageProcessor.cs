@@ -9,7 +9,7 @@ namespace AsteroidsServer.Src
     {
         private readonly GameState gameState = gameState;
 
-        public GenericMessage? ProcessMessage(GenericMessage msg)
+        public GenericMessage? ProcessMessage(GenericMessage msg, string socketId)
         {
             if (msg.StringMessages.First == null)
             {
@@ -20,26 +20,27 @@ namespace AsteroidsServer.Src
 
             return messageCode switch
             {
-                MessageTypeCodes.join => ProcessJoinMessage(msg),
+                MessageTypeCodes.join => ProcessJoinMessage(msg, socketId),
                 MessageTypeCodes.inboundShip => ProcessInboundShipMessage(msg),
                 _ => null,
             };
         }
 
-        private GenericMessage? ProcessJoinMessage(GenericMessage msg)
+        private GenericMessage? ProcessJoinMessage(GenericMessage msg, string socketId)
         {
-            Join join = (Join)new Join().FromRequest(msg);
+            Join join = new Join().FromRequest(msg);
             ShipEntity ship = new()
             {
                 color = join.shipColor
             };
-            join.id = gameState.AddShip(ship);
+            join.id = socketId;
+            gameState.AddShip(socketId, ship);
             return join.ToResponse();
         }
 
         private GenericMessage? ProcessInboundShipMessage(GenericMessage msg)
         {
-            InboundShipMessage shipMsg = (InboundShipMessage)new InboundShipMessage().FromRequest(msg);
+            InboundShipMessage shipMsg = new InboundShipMessage().FromRequest(msg);
             ShipEntity? ship = gameState.GetShip(shipMsg.id);
 
             if (ship == null)

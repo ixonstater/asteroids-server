@@ -3,13 +3,13 @@ using AsteroidsServer.Src.TrackedEntities;
 
 namespace AsteroidsServer.Src.Messages.Ship
 {
-    class InboundShipMessage : IMessage
+    class InboundShipMessage
     {
         public Rotation rotation = new();
         public Position position = new();
         public string id = "";
 
-        public IMessage FromRequest(GenericMessage message)
+        public InboundShipMessage FromRequest(GenericMessage message)
         {
             int shipPositionXIndex = 0;
             int shipPositionYIndex = 1;
@@ -55,11 +55,6 @@ namespace AsteroidsServer.Src.Messages.Ship
             }
 
             return this;
-        }
-
-        public GenericMessage ToResponse()
-        {
-            throw new NotImplementedException("Ship is an inbound message and should never have a response.");
         }
     }
 }

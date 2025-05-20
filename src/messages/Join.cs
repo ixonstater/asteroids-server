@@ -9,11 +9,11 @@ namespace AsteroidsServer.Src.Messages
     /// Required Outputs: Ship id
     /// Message Format: ShipColor(string)
     /// </summary>
-    public class Join : IMessage
+    public class Join
     {
         public TrackedEntities.ShipColor shipColor;
         public string id = "";
-        public IMessage FromRequest(GenericMessage message)
+        public Join FromRequest(GenericMessage message)
         {
             int colorIndex = 1;
             var current = message.StringMessages.First;

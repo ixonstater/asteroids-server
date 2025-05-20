@@ -21,16 +21,12 @@ namespace AsteroidsServer.Src
             return value;
         }
 
-        public string AddShip(ShipEntity ship)
+        public void AddShip(string shipId, ShipEntity ship)
         {
-            string id = Utils.GenerateRandomId();
-            Console.WriteLine("ShipId: " + id);
-            if (!_ships.TryAdd(id, ship))
+            if (!_ships.TryAdd(shipId, ship))
             {
-                Console.WriteLine("Warning: Failed to add ship with id " + id);
+                Console.WriteLine("Warning: Failed to add ship with id " + shipId);
             }
-
-            return id;
         }
 
         public void DeleteShip(string id)

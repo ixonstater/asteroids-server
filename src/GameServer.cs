@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.WebSockets;
 using System.Text;
 using AsteroidsServer.Src.Messages.Message;
+using AsteroidsServer.Src.Messages.Ship;
 
 namespace AsteroidsServer.Src;
 
@@ -9,12 +10,12 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
 {
     private readonly ComputationLoop computationLoop = computationLoop;
     private readonly HttpListener httpListener = new();
-    private readonly Dictionary<Guid, WebSocket> _sockets = [];
+    private readonly Dictionary<string, WebSocket> _sockets = [];
     public int SocketCount
     {
         get => _sockets.Count;
     }
-    public Dictionary<Guid, WebSocket> Sockets
+    public Dictionary<string, WebSocket> Sockets
     {
         get => _sockets;
     }
@@ -61,7 +62,7 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
 
         // 1KB is good rite...?
         byte[] buffer = new byte[1000];
-        Guid socketId = Guid.NewGuid();
+        string socketId = Utils.GenerateRandomId();
         _sockets.Add(socketId, socket);
 
         // Do this after adding the socket to the Dictionary so that the computation loop doesn't immediately
@@ -80,7 +81,7 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
                 }
 
                 WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-                GenericMessage? response = inboundMessageProcessor.ProcessMessage(MessageUtils.Deserialize(new(buffer, 0, result.Count)));
+                GenericMessage? response = inboundMessageProcessor.ProcessMessage(MessageUtils.Deserialize(new(buffer, 0, result.Count)), socketId);
                 if (response != null)
                 {
                     await socket.SendAsync(MessageUtils.Serialize(response), WebSocketMessageType.Binary, true, CancellationToken.None);

@@ -12,7 +12,8 @@ class Program
         }
 
         GameStateMessageProcessor gameStateMessageProcessor = new();
-        GameServer server = new(new(new(), new(), gameStateMessageProcessor), new(new()), gameStateMessageProcessor);
+        GameState gameState = new();
+        GameServer server = new(new(new(), gameState, gameStateMessageProcessor), new(gameState), gameStateMessageProcessor);
         server.Start();
     }
 }
