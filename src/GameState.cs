@@ -6,9 +6,9 @@ namespace AsteroidsServer.Src
     {
         private readonly Dictionary<string, ShipEntity> _ships = [];
 
-        public ShipEntity[] Ships
+        public Dictionary<string, ShipEntity> Ships
         {
-            get => [.. _ships.Values];
+            get => _ships;
         }
 
         public ShipEntity? GetShip(string id)

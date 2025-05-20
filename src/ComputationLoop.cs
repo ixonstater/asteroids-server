@@ -91,6 +91,6 @@ public class ComputationLoop
 
     private void DoWork()
     {
-        // Call GameStateMessageProcessor here
+        gameStateMessageProcessor.BroadcastShipPositions(gameState.Ships);
     }
 }
