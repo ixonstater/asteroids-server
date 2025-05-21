@@ -27,6 +27,13 @@ public class GenericMessage
     }
 }
 
+public class MessageTypeCodes
+{
+    public const string join = "j";
+    public const string inboundShip = "s";
+    public const string shipsUpdate = "p";
+}
+
 public enum MessageSegmentType
 {
     FLOAT = 0x0,
