@@ -75,8 +75,7 @@ public class GameServer(ComputationLoop computationLoop, InboundMessageProcessor
             {
                 if (socket.State != WebSocketState.Open)
                 {
-                    socket.Dispose();
-                    _sockets.Remove(socketId);
+                    Console.WriteLine("Dead socket connection found in game server inbound message processing.");
                     return;
                 }
 

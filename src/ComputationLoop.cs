@@ -91,6 +91,7 @@ public class ComputationLoop
 
     private void DoWork()
     {
+        gameStateMessageProcessor.CleanUpSocketConnectionsAndGameState(gameState);
         gameStateMessageProcessor.BroadcastShipPositions(gameState);
     }
 }
